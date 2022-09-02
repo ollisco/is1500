@@ -77,7 +77,7 @@ tiend:	sw	$t0,0($a0)	# save updated result
   
 hexasc:
 	andi $v0, $a0, 15 # will get the least significant bit of $s0 and put it in $t0.
-	li $t0, 9
+	li $t0, 10
 	slt $t1, $a0, $t0 # $t1 1 if $a0 < $t0
 	bne $t1, $zero ISSMALL # if 1
 	nop
@@ -93,28 +93,39 @@ delay:
   	nop
   	
 time2string: 
+	PUSH($ra)
 	PUSH($s0) # Push s0 to the stack to ensure it's the same after t2s
 	PUSH($s1)
 	move $s0, $a0
 	la $s1, ($a1) # load address stored in a1 into s0
+	
+	sb $zero, 5($s0)
+		
 	andi $a0, $s1, 15 # only use the first  four bits
 	jal hexasc
-	sb $v0, ($s0) # store return value of hexasc=v0 into address of given a0=s1
+	sb $v0, 4($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
+
 	andi $a0, $s1, 255 # only use the first  four bits
-	jal hexasc
-	sb $v0, 1($s0) # store return value of hexasc=v0 into address of given a0=s1
-	
-	andi $a0, $s1, 4095 # only use the first  four bits
-	jal hexasc
-	sb $v0, 2($s0) # store return value of hexasc=v0 into address of given a0=s1
-	
-	andi $a0, $s1, 65535 # only use the first  four bits
+	srl $a0, $a0, 4
 	jal hexasc
 	sb $v0, 3($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
-	sb $zero, 4($s0)
+	li $t0, 0x3a
+	sb $t0, 2($s0) 
+	
+	andi $a0, $s1, 4095 # only use the first  four bits
+	srl $a0, $a0, 8
+	jal hexasc
+	sb $v0, 1($s0) # store return value of hexasc=v0 into address of given a0=s1
+	
+	andi $a0, $s1, 65535 # only use the first  four bits
+	srl $a0, $a0, 12
+	jal hexasc
+	sb $v0, ($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
 	POP($s1)
 	POP($s0)
+	POP($ra)
+	jr $ra
 	
