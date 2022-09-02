@@ -93,7 +93,7 @@ delay:
   	nop
   	
 time2string: 
-	PUSH($ra)
+	PUSH($ra) # Push return address to stack since hexasc will change it ($ra)
 	PUSH($s0) # Push s0 to the stack to ensure it's the same after t2s
 	PUSH($s1)
 	move $s0, $a0
@@ -106,21 +106,21 @@ time2string:
 	sb $v0, 4($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
 
-	andi $a0, $s1, 255 # only use the first  four bits
-	srl $a0, $a0, 4
+	andi $a0, $s1, 255 # only use the first  eight bits
+	srl $a0, $a0, 4 # shift to the right to only use the four leftmost bits
 	jal hexasc
 	sb $v0, 3($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
-	li $t0, 0x3a
+	li $t0, 0x3a # colon ascii char
 	sb $t0, 2($s0) 
 	
-	andi $a0, $s1, 4095 # only use the first  four bits
-	srl $a0, $a0, 8
+	andi $a0, $s1, 4095 # only use the first twelve bits
+	srl $a0, $a0, 8 # shift to the right to only use the four leftmost bits
 	jal hexasc
 	sb $v0, 1($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
-	andi $a0, $s1, 65535 # only use the first  four bits
-	srl $a0, $a0, 12
+	andi $a0, $s1, 65535 # use the 16 leftmost bits
+	srl $a0, $a0, 12 # shift to the right to only use the four leftmost bits
 	jal hexasc
 	sb $v0, ($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
@@ -128,4 +128,6 @@ time2string:
 	POP($s0)
 	POP($ra)
 	jr $ra
+
+
 	
