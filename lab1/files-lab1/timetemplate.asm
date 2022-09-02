@@ -74,3 +74,47 @@ tiend:	sw	$t0,0($a0)	# save updated result
 
   # you can write your code for subroutine "hexasc" below this line
   #
+  
+hexasc:
+	andi $v0, $a0, 15 # will get the least significant bit of $s0 and put it in $t0.
+	li $t0, 9
+	slt $t1, $a0, $t0 # $t1 1 if $a0 < $t0
+	bne $t1, $zero ISSMALL # if 1
+	nop
+	addi $v0, $v0, 0x37
+	jr $ra      
+	
+	ISSMALL: addi $v0, $v0, 0x30
+	jr $ra      # return from function
+	
+	
+delay:
+  	jr $ra
+  	nop
+  	
+time2string: 
+	PUSH($s0) # Push s0 to the stack to ensure it's the same after t2s
+	PUSH($s1)
+	move $s0, $a0
+	la $s1, ($a1) # load address stored in a1 into s0
+	andi $a0, $s1, 15 # only use the first  four bits
+	jal hexasc
+	sb $v0, ($s0) # store return value of hexasc=v0 into address of given a0=s1
+	
+	andi $a0, $s1, 255 # only use the first  four bits
+	jal hexasc
+	sb $v0, 1($s0) # store return value of hexasc=v0 into address of given a0=s1
+	
+	andi $a0, $s1, 4095 # only use the first  four bits
+	jal hexasc
+	sb $v0, 2($s0) # store return value of hexasc=v0 into address of given a0=s1
+	
+	andi $a0, $s1, 65535 # only use the first  four bits
+	jal hexasc
+	sb $v0, 3($s0) # store return value of hexasc=v0 into address of given a0=s1
+	
+	sb $zero, 4($s0)
+	
+	POP($s1)
+	POP($s0)
+	

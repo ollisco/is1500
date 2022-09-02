@@ -25,12 +25,13 @@ hexasc:
 	li $t0, 9
 	slt $t1, $a0, $t0 # $t1 1 if $a0 < $t0
 	bne $t1, $zero ISSMALL # if 1
-	beq $t1, $zero ISLARGE
+	nop
+	addi $v0, $v0, 0x37
+	jr $ra      
 	
 	ISSMALL: addi $v0, $v0, 0x30
 	jr $ra      # return from function
 	
-	ISLARGE: addi $v0, $v0, 0x37
-	jr $ra      # return from function
+
 
 
