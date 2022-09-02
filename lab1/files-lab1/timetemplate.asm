@@ -88,9 +88,32 @@ hexasc:
 	jr $ra      # return from function
 	
 	
-delay:
-  	jr $ra
-  	nop
+delay: # $a0=ms : int
+	PUSH($s0)
+	move $s0, $a0
+	blt $zero, $s0, delayreturn # if above is false (0 > $a0) then return
+	nop
+	subi $s0, $s0, 1
+	li $a0, 0
+	li $a1, 4711	
+	j delayloop 
+	nop
+	
+
+delayloop:
+	bgt $a0, $a1, delay
+	nop
+	addi $a0, $a0, 1
+	j delayloop
+	nop
+
+delayreturn:
+	POP($s0)
+	jr $ra
+	nop
+
+
+
   	
 time2string: 
 	PUSH($ra) # Push return address to stack since hexasc will change it ($ra)
