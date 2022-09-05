@@ -24,7 +24,7 @@ main:
 	syscall
 	nop
 	# wait a little
-	li	$a0,2
+	li	$a0,1000
 	jal	delay
 	nop
 	# call tick
@@ -91,19 +91,19 @@ hexasc:
 delay: # $a0=ms : int
 	PUSH($s0)
 	move $s0, $a0
-	blt $zero, $s0, delayreturn # if above is false (0 > $a0) then return
+	blt $s0, $zero, delayreturn # if above is false (0 > $a0) then return
 	nop
 	subi $s0, $s0, 1
-	li $a0, 0
-	li $a1, 4711	
+	li $a1, 0
+	li $a2, 2	#4711
 	j delayloop 
 	nop
 	
 
 delayloop:
-	bgt $a0, $a1, delay
+	bgt $a1, $a2, delay
 	nop
-	addi $a0, $a0, 1
+	addi $a1, $a1, 1
 	j delayloop
 	nop
 

@@ -11,9 +11,9 @@ loop:
 	li	$v0,11		# syscall with v0 = 11 will print out
 	syscall			# one byte from a0 to the Run I/O window
 
-	addi	$s0,$s0,3	# what happens if the constant is changed?
+	addi	$s0,$s0,3	# Changed this to step 3 <----
 	
-	li	$t0,0x5d
+	li	$t0,0x5d	# Changed this to 93 = 0x5d which is divisable by three
 	bne	$s0,$t0,loop
 	nop			# delay slot filler (just in case)
 
