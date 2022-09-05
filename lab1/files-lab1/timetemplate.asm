@@ -24,7 +24,7 @@ main:
 	syscall
 	nop
 	# wait a little
-	li	$a0,1000
+	li	$a0, 0
 	jal	delay
 	nop
 	# call tick
@@ -86,29 +86,25 @@ hexasc:
 	
 	ISSMALL: addi $v0, $v0, 0x30
 	jr $ra      # return from function
-	
-	
-delay: # $a0=ms : int
-	PUSH($s0)
-	move $s0, $a0
-	blt $s0, $zero, delayreturn # if above is false (0 > $a0) then return
 	nop
-	subi $s0, $s0, 1
+	
+delay: 
+	move $t0, $a0
+delayinner:
+	blt $t0, $zero, delayreturn # if above is false (0 > $a0) then return
+	nop
+	subi $t0, $t0, 1
 	li $a1, 0
-	li $a2, 2	#4711
+	li $a2, 10	#4711
 	j delayloop 
-	nop
-	
-
+	nop	
 delayloop:
-	bgt $a1, $a2, delay
+	beq $a1, $a2, delayinner
 	nop
 	addi $a1, $a1, 1
 	j delayloop
 	nop
-
 delayreturn:
-	POP($s0)
 	jr $ra
 	nop
 
