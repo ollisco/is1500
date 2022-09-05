@@ -136,3 +136,19 @@ A2: All of these are run once
     jr $ra
 ```
 This happens since `$a0` is -1 which we copy into $t0. This causes the `beq`statement to be true and we branch to delayreturn which only returns.
+
+## Assignment 5: Delayed branching
+Done ✅
+
+## Assignment 6: Move to the MCB32 environment
+
+**Q1: What is the effect of the assembler directive .global? Why is the directive particularly 
+important in this assignment? The teachers will help you with this if necessary.**
+
+A1: 
+
+## Assignment 7: At the lab session
+**Q1: When you move your code from the simulator to the lab-board, you have to change the 
+value of the constant in the delay subroutine to get correct timing. Why?**
+
+A1: 
