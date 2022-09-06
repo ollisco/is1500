@@ -17,6 +17,7 @@
 mytime:	.word 0x5957
 timstr:	.ascii "text more text lots of text\0"
 	.text
+	.globl main
 main:
 	# print timstr
 	la	$a0,timstr
@@ -24,7 +25,7 @@ main:
 	syscall
 	nop
 	# wait a little
-	li	$a0, 0
+	li	$a0, 1000
 	jal	delay
 	nop
 	# call tick
@@ -88,14 +89,14 @@ hexasc:
 	jr $ra      # return from function
 	nop
 	
-delay: 
+delay: # 
 	move $t0, $a0
 delayinner:
-	blt $t0, $zero, delayreturn # if above is false (0 > $a0) then return
+	ble  $t0, $zero, delayreturn # if above is false (0 > $a0) then return
 	nop
-	subi $t0, $t0, 1
+	subu $t0, $t0, 1
 	li $a1, 0
-	li $a2, 10	#4711
+	li $a2, 4711	#4711
 	j delayloop 
 	nop	
 delayloop:
@@ -122,12 +123,14 @@ time2string:
 		
 	andi $a0, $s1, 15 # only use the first  four bits
 	jal hexasc
+	nop
 	sb $v0, 4($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
 
 	andi $a0, $s1, 255 # only use the first  eight bits
 	srl $a0, $a0, 4 # shift to the right to only use the four leftmost bits
 	jal hexasc
+	nop
 	sb $v0, 3($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
 	li $t0, 0x3a # colon ascii char
@@ -136,17 +139,20 @@ time2string:
 	andi $a0, $s1, 4095 # only use the first twelve bits
 	srl $a0, $a0, 8 # shift to the right to only use the four leftmost bits
 	jal hexasc
+	nop
 	sb $v0, 1($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
 	andi $a0, $s1, 65535 # use the 16 leftmost bits
 	srl $a0, $a0, 12 # shift to the right to only use the four leftmost bits
 	jal hexasc
-	sb $v0, ($s0) # store return value of hexasc=v0 into address of given a0=s1
+	nop
+	sb $v0, 0($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
 	POP($s1)
 	POP($s0)
 	POP($ra)
 	jr $ra
+	nop
 
 
 	

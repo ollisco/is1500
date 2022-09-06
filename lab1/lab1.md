@@ -38,7 +38,7 @@ A2: values less than 10
 ## Assignment 3: Printing the time
 **Q1: Which registers are saved and restored by your subroutine? Why?**
 
-`$s0` and `$s1` are saved and restored since they are used in the subroutine and saved registers are required to be restored before function exits. `$r` is stored since another subroutine is called and will need to use that register.
+`$s0` and `$s1` are saved and restored since they are used in the subroutine and saved registers are required to be restored before function exits. `$ra` is stored since another subroutine is called and will need to use that register.
 
 **Q2: Which registers are used but not saved? Why are these not saved?**
 
@@ -48,7 +48,7 @@ A2: values less than 10
 
 ```mips
     andi $a0, $s1, 255 
-    srl $a0, $a0, 
+    srl $a0, $a0, 4
     jal hexasc
     sb $v0, 3($s0) 
 ```
@@ -60,21 +60,22 @@ Code
 delay: 
 	move $t0, $a0
 delayinner:
-	beq $t0, $zero, delayreturn 
+	ble  $t0, $zero, delayreturn # if above is false (0 > $a0) then return
 	nop
 	subi $t0, $t0, 1
 	li $a1, 0
-	li $a2, 10	
+	li $a2, 10	#4711
 	j delayloop 
 	nop	
 delayloop:
-	bgt $a1, $a2, delayinner
+	beq $a1, $a2, delayinner
 	nop
 	addi $a1, $a1, 1
 	j delayloop
 	nop
 delayreturn:
 	jr $ra
+	nop
 ```
 
 **Q1: If the argument value in register** **`$a0`** **is zero, which instructions in your subroutine are executed? How many times each? Why?**
@@ -104,37 +105,33 @@ delayreturn:
 
 A1: These are the lines run and the amount of times they are run.
 ```mips
-# once
-move $t0, $a0 
-# twice
-beq $t0, $zero, delayreturn 
-nop
-subi $t0, $t0, 1
-li $a1, 0
-li $a2, 10
-j delayloop 
-
-# eleven times
-beq $a1, $a2, delayinner
-# ten times
-nop
-addi $a1, $a1, 1
-j delayloop
-nop
-
-# once
-jr $ra
+delay: 
+	move $t0, $a0 # once
+delayinner:
+	ble  $t0, $zero, delayreturn # once
+	nop
+	subi $t0, $t0, 1
+	li $a1, 0
+	li $a2, 10
+	j delayloop 
+	nop	
+delayloop:
+	beq $a1, $a2, delayinner
+	nop
+	addi $a1, $a1, 1
+	j delayloop
+	nop
+delayreturn:
+	jr $ra # once
+	nop
 ```
 
 
 **Q2: Repeat the previous question for a negative number: -1.**
 
-A2: All of these are run once
-```mips
-	move $t0, $a0
-	beq $t0, $zero, delayreturn
-    jr $ra
-```
+A2: Same since the ble is branch less or equal and both 0 and 1 are less than or equal to 0 meaning they will behave the
+
+
 This happens since `$a0` is -1 which we copy into $t0. This causes the `beq`statement to be true and we branch to delayreturn which only returns.
 
 ## Assignment 5: Delayed branching
@@ -145,10 +142,9 @@ Done ✅
 **Q1: What is the effect of the assembler directive .global? Why is the directive particularly 
 important in this assignment? The teachers will help you with this if necessary.**
 
-A1: 
+A1: Since the functions in labWork.S are used in other files we need to make them global. 
 
 ## Assignment 7: At the lab session
-**Q1: When you move your code from the simulator to the lab-board, you have to change the 
-value of the constant in the delay subroutine to get correct timing. Why?**
+**Q1: When you move your code from the simulator to the lab-board, you have to change the value of the constant in the delay subroutine to get correct timing. Why?**
 
-A1: 
+A1: Differnt hardware run differently fast.
