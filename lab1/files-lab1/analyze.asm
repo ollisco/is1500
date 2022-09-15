@@ -13,7 +13,7 @@ loop:
 
 	addi	$s0,$s0,3	# Changed this to step 3 <----
 	
-	li	$t0,0x5d	# Changed this to 93 = 0x5d which is divisable by three
+	li	$t0,0x5b	# Changed this to 93 = 0x5d which is divisable by three
 	bne	$s0,$t0,loop
 	nop			# delay slot filler (just in case)
 

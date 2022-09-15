@@ -96,7 +96,7 @@ delayinner:
 	nop
 	subu $t0, $t0, 1
 	li $a1, 0
-	li $a2, 4711	#4711
+	li $a2, 20	#4711
 	j delayloop 
 	nop	
 delayloop:
@@ -117,7 +117,11 @@ time2string:
 	PUSH($s0) # Push s0 to the stack to ensure it's the same after t2s
 	PUSH($s1)
 	move $s0, $a0
-	la $s1, ($a1) # load address stored in a1 into s0
+	la $s1, ($a1) # load address stored in a1 into s1
+	
+	andi $t0, $s1, 0xFF
+	
+	beq $t0, $zero, ding
 	
 	sb $zero, 5($s0)
 		
@@ -134,7 +138,7 @@ time2string:
 	sb $v0, 3($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
 	li $t0, 0x3a # colon ascii char
-	sb $t0, 2($s0) 
+	sb $t0, 2($s0) 	
 	
 	andi $a0, $s1, 4095 # only use the first twelve bits
 	srl $a0, $a0, 8 # shift to the right to only use the four leftmost bits
@@ -148,11 +152,36 @@ time2string:
 	nop
 	sb $v0, 0($s0) # store return value of hexasc=v0 into address of given a0=s1
 	
+	j end
+	
+	ding:
+	li, $t3, 0x44
+	sb, $t3, 0($s0)
+	
+	li, $t3, 0x49
+	sb, $t3, 1($s0)
+	
+	li, $t3, 0x4E
+	sb, $t3, 2($s0)
+	
+	li, $t3, 0x47
+	sb, $t3, 3($s0)
+	
+	li, $t3, 0x00
+	sb, $t3, 4($s0)
+	
+	
+	end:
 	POP($s1)
 	POP($s0)
 	POP($ra)
 	jr $ra
 	nop
+
+
+	
+	
+	
 
 
 	

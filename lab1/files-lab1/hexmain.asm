@@ -23,7 +23,7 @@ stop:	j	stop		# stop after one run
 hexasc:
 	andi $v0, $a0, 15 # will get the least significant bit of $s0 and put it in $t0.
 	li $t0, 10
-	slt $t1, $a0, $t0 # $t1 1 if $a0 < $t0
+	slt $t1, $v0, $t0 # $t1 1 if $a0 < $t0
 	bne $t1, $zero ISSMALL # if 1
 	nop
 	addi $v0, $v0, 0x37
