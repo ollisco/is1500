@@ -99,15 +99,9 @@ Here we again grab the equivalent address in the list array (int*) and deference
 
 **Q5:Is your computer using big-endian or little-endian? How did you come to your conclusion? Is there any benefit of using either of the two alternatives?**
 
-A5: M1 MacBook has two CPU architecures. Intel x86 and ARM. Both of these use little endian though. From experience the way this can be checked is using this python snippet.
-
-Python:
-```python
-from sys import byteorder
-print(byteorder) # will print 'little' or 'big'
-```
-
-Which can also be done in C 
+A5: M1 MacBook has two CPU architecures. Intel x86 and ARM. Both of these use little endian though. 
+ 
+This can be clearly done in C 
 ```c
 #include <inttypes.h>
 #include <stdio.h>
@@ -131,4 +125,75 @@ int main(void)
 Since 1 is store as `00 01` (in 16b hex form) it would be stored as `00 01` in big endian form and `01 00`. But since we casted the pointer of data to a 8bit pointer it now only points to the first byte. So **`00`** `01` if it's big endian and **`01`** `00` which is small endian. If the value of what the pointer points to is 0<sub>10</sub> (00<sub>16</sub>) it is then big endian and 1<sub>10</sub> (01<sub>16</sub>) small endian. Python is easier :)
 
 There is no immeadiate answer for which is better. What's better milk or cereal first? Most PCs use little endian and most network protocols are big endian. Big endian is often called network endian.
+
+## Assignment 5: Memory Layout
+**Q1: Consider AM18, AM19, and AF1. Explain why gv ends up with the incremented value, but m does not.**
+
+A1: gv is a global value so changing it in fun will ofc change its value but when we send a m into fun we send a copy of the data. So we copy the value of m into param change param and then save the increased param not data. 
+
+```mips 
+fun:
+    move $t0, $a0
+    addi $t0, $t0, 1
+    sw $t0, 0($sp)
+```
+
+**Q2: Pointer cp is a character pointer that points to a sequence of bytes. What is the size of the cp pointer itself?**
+
+A2: 4 bytes = 32 bits (Dependant on word size of cpu)
+
+**Q3: Explain how a C string is laid out in memory. Why does the character string that cp points to have to be 9 bytes?**
+
+A3: There are 8 chars which are each 1 byte and at the end there is a nullbyte \0 which is also 1 byte. This is to indicate the end of the string.
+
+**Q4: Which addresses have fun and main? Which sections are they located in? What kind of memory are they stored in? What is the meaning of the data that these symbols points to?**
+
+fun: 9D001180
+main: 9D0011D8
+
+They are both in the program flash according to the reference manual. They are stored in the virual memory map. The data they point to is the starting point of where the funtion is in memory.
+---
+Before the examination, you should also try to answer the following. When the lab-assistant
+performs the examination, he/she can also clarify anything that you did not understand with the
+following questions:
+---
+
+**Q5: Which addresses are variables in and gv located at? Which memory sections according to the PIC32 memory map? Why?**
+
+gv: A00000C
+
+This is the RAM (random access memory). 
+
+The reason is since it is global it needs to always be accessible and thereby stored in the RAM.
+
+**Q6: Variables p and m are not global variables. Where are they allocated? Which memory section is used for these variables? Why are the address numbers for p and m much larger than for in and gv?**
+
+p: A0003FE8
+m: A0003FE4
+
+This is reserved space. They are stored here since 
+
+**Q7: At print statement AM5, what is the address of pointer p, what is the value of pointer p, and what value is pointer p pointing to?**
+
+A7: 
+Address of pointer p: A0003FE8
+Value of pointer p: A0003FE4
+Value pointer p is pointing to: 7 (AM6)
+
+**Q8: At print statement AM7, what is the address of pointer p, what is the value of pointer p, and what value is pointer p pointing to?**
+
+A8:
+Address of pointer p: A0003FE8
+Value of pointer p: A0003FE4
+Value pointer p is pointing to: 8 (AM8)
+
+**Q9: Consider AM14 to AM17. Is the PIC32 processor using big-endian or little-endian? Why?**
+
+Little endian since`0x1234adcd` is stoed as `cd ab 34 12` in memory. The first byte is the least significant byte and the last byte is the most significant byte.
+
+
+
+
+
+
 
