@@ -1,4 +1,4 @@
-
+// Author Olle Jernström
 
 #include <stdio.h>
 #include <string.h>

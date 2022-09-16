@@ -1,7 +1,7 @@
 /*
  print-prime.c
- By David Broman.
- Last modified: 2015-09-15
+ By Marcus Bardvall
+ Last modified: 2022-09-15
  This file is in the public domain.
 */
 
@@ -23,8 +23,7 @@ int is_prime(int n)
             return 0;
         }
     }
-
-    return 1;
+    return n > 1;
 }
 
 void print_number(int n)
@@ -63,7 +62,7 @@ void print_sieves(int n)
     }
 
     // print array items != 0
-    for (int i = 0; i < n - 1; i++)
+    for (i = 0; i < n - 1; i++)
     {
         if (array[i])
         {

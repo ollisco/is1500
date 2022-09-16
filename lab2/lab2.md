@@ -55,8 +55,7 @@ A1: The steps are:
 
 **Q2: What is the largest prime number that you can print within 2 seconds of computation? What is the largest number you can print within 10 seconds? Is it the same for print_prime.c, sieves.c, and sieves-heap.c? Why or why not?**
 
-A2: sieves.c and sieves-heap.c are both able to print all numbers before seg fault in the two second window. print primes does not have to allocate all memory at once and can go further even though it is slower.
- 
+A2: sieves.c is both able to print all numbers before seg fault in the two second window. print primes does not have to allocate all memory at once on the stack and can go further even though it is slower. print sieves heap store the memory on stack and can therefore co past seg fault. 
 
 
 ## Assignment 4: Pointers
@@ -151,15 +150,13 @@ A3: There are 8 chars which are each 1 byte and at the end there is a nullbyte \
 fun: 9D001180
 main: 9D0011D8
 
-They are both in the program flash according to the reference manual. They are stored in the virual memory map. The data they point to is the starting point of where the funtion is in memory.
----
-Before the examination, you should also try to answer the following. When the lab-assistant
-performs the examination, he/she can also clarify anything that you did not understand with the
-following questions:
----
+They are both in the program flash according to the reference manual. They are stored in the virual memory map. The data they point to is where the funtion is in memory.
+
+**Before the examination, you should also try to answer the following. When the lab-assistant performs the examination, he/she can also clarify anything that you did not understand with the following questions:**
 
 **Q5: Which addresses are variables in and gv located at? Which memory sections according to the PIC32 memory map? Why?**
 
+in: A000008
 gv: A00000C
 
 This is the RAM (random access memory). 
@@ -171,7 +168,7 @@ The reason is since it is global it needs to always be accessible and thereby st
 p: A0003FE8
 m: A0003FE4
 
-This is reserved space. They are stored here since 
+This is reserved space. They are not global and does not have to be accessed at all times.
 
 **Q7: At print statement AM5, what is the address of pointer p, what is the value of pointer p, and what value is pointer p pointing to?**
 

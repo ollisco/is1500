@@ -24,7 +24,7 @@ int is_prime(int n)
         }
     }
 
-    return 1;
+    return n > 1;
 }
 
 void print_number(int n)
@@ -41,7 +41,7 @@ void print_number(int n)
 int *generate_sieves(int n)
 {
     // malloc array
-    int *array = malloc((n - 1) * sizeof(int));
+    int *array = malloc(sizeof(int) * (n - 1));
 
     for (int i = 0; i < n - 1; i++)
     {
