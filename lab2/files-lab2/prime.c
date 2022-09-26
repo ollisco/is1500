@@ -19,7 +19,7 @@ int is_prime(int n)
       return 0;
     }
   }
-  return n > 1; // Olle Jernström
+  return n > 1;
 }
 
 int main(void)

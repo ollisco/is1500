@@ -34,7 +34,7 @@ void print_number(int n)
     printf("\n");
     current = 0;
   }
-  printf("%d ", n);
+  printf("%4d ", n);
   current++;
 }
 
