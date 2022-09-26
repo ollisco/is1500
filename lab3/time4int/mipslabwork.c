@@ -58,7 +58,7 @@ void user_isr(void)
   if (IFS(0) & 0x100)
   {
     // reset interrupt signal
-    IFSCLR(0) = 0x100;
+    IFSCLR(0) = 0x100; // THIS LINE RESETS THE FLAG
     // increment timeoutcount
     timeoutcount++;
     // check if timeoutcount is 10

@@ -48,6 +48,49 @@ No since we update every second it will wait until the next update event which c
 
 
 ## Assignment 3: Interrupts
+**When the time-out event-flag is a "1", how does your code reset it to "0"?**
+ 
+```c
+ if (IFS(0) & 0x100)
+  {
+    // reset interrupt signal
+    IFSCLR(0) = 0x100; // THIS LINE RESETS THE FLAG
+    // increment timeoutcount
+    timeoutcount++;
+    // check if timeoutcount is 10
+    if (timeoutcount == 10)
+    {
+      time2string(textstring, mytime);
+      display_string(3, textstring);
+      display_update();
+      tick(&mytime);
+      // reset timeoutcount
+      timeoutcount = 0;
+      // increment mytime
+      mytime++;
+    }
+  }
+```
+
+**What would happen if the time-out event-flag was not reset to "0" by your code? Why?**
+Then the update statement would run every time since every period the interrupt 1 is overwritten with 1.
+
+**From which part of the code is the function user_isr called? Why is it called from there?**
+In vectors.S since there is where the interrupt handler is.
+
+**Why are registers saved before the call to user_isr? Why are only some registers saved?**
+To ensure that the values are the same after the interrupt handler is done. Only some are saved since the S registers are already saved.
+
+**Which device-register (or registers), and which processor-register (or registers) must be written to enable interrupts from the timer? Describe the functions of the relevant registers.**
+```c
+    // T2IE - Device register
+    IEC(0) = 0x100; // enable timer 2 interrupt
+```
+"The k registers are reserved for use by the OS kernel. They may change randomly at any time as they are used by interrupt handlers."
+- Wikipedia.
+
+
+
 
 
 
