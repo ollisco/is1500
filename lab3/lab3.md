@@ -83,11 +83,10 @@ To ensure that the values are the same after the interrupt handler is done. Only
 
 **Which device-register (or registers), and which processor-register (or registers) must be written to enable interrupts from the timer? Describe the functions of the relevant registers.**
 ```c
-    // T2IE - Device register
-    IEC(0) = 0x100; // enable timer 2 interrupt
+// T2IE - Device register
+IEC(0) = 0x100; // enable timer 2 interrupt
 ```
-"The k registers are reserved for use by the OS kernel. They may change randomly at any time as they are used by interrupt handlers."
-- Wikipedia.
+"The k registers are reserved for use by the OS kernel. They may change randomly at any time as they are used by interrupt handlers." - Wikipedia.
 
 
 

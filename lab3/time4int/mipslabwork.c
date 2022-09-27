@@ -99,7 +99,7 @@ void labinit(void)
 
   IEC(0) = 0x100; // enable timer 2 interrupt
   IPC(2) = 0x7;   // set priority to 7
-
+  enable_interrupt();
   return;
 }
 
