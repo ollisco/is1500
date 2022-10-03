@@ -31,12 +31,12 @@ void user_isr(void)
 /* Lab-specific initialization goes here */
 void labinit(void)
 {
-  // set output
+  // set output for leds
   int bits = ~0b11111111;
   volatile int *trise = (volatile int *)0xbf886100; // 0xbf886100 = TRISE
   *trise &= bits;
 
-  // set output
+  // set input for buttons and switches
   int bits_d = 0b111111;
   bits_d = bits_d << 5;
   TRISD |= bits_d;

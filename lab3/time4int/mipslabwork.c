@@ -17,6 +17,7 @@
 
 #define TIMEOUT (80000000 / 256) / 10; // 80Mhz / 10
 int timeoutcount = 0;
+int timeoutcount2 = 0;
 int prime = 1234567;
 
 int mytime = 0x5957;
@@ -54,6 +55,16 @@ void btns()
 /* Interrupt Service Routine */
 void user_isr(void)
 {
+  if (IFS(0) & 0x800)
+  {
+    IFSCLR(0) = 0x800;
+    time2string(textstring, mytime);
+    display_string(3, textstring);
+    display_update();
+    tick(&mytime);
+    tick(&mytime);
+    tick(&mytime);
+  }
   // check for interrupt signal
   if (IFS(0) & 0x100)
   {
@@ -70,8 +81,6 @@ void user_isr(void)
       tick(&mytime);
       // reset timeoutcount
       timeoutcount = 0;
-      // increment mytime
-      mytime++;
     }
   }
 
@@ -97,8 +106,13 @@ void labinit(void)
   TMR2 = 0x00;       // reset the counter
   T2CONSET = 0x8000; // start the timer
 
-  IEC(0) = 0x100; // enable timer 2 interrupt
-  IPC(2) = 0x7;   // set priority to 7
+  // enable interruptfor sw2 connected to INT2
+
+  IECSET(0) = 0x100;   // enable timer 2 interrupt
+  IECSET(0) = 0x800;   // enable INT2 interrupt
+  IPCSET(2) = 0b01100; // set priority to 7 for T2
+  IPCSET(2) = 0x1;
+  IPCSET(2) = 0b111 << 10; // set priority to 7 for INT2
   enable_interrupt();
   return;
 }

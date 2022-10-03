@@ -17,7 +17,9 @@ They are related since the operate on same port.
 
 **Q3: In the generated assembly code, in which MIPS register will the return values from functions getbtns and getsw be placed in. You should be able to answer this question without debugging the generated assembly code.**
 
-Both in v0. (Saved separately)
+Both in v0. 
+
+<!-- (Saved separately) -->
 
 
 **Q4: In this exercise, we explained which bits that should be used in Port D and Port E. How can you find this information in the PIC32 and ChipKIT manuals? Be prepared to demonstrate how to find this information in the manuals. Advice: check the lecture slides from lecture 5 for ideas**
